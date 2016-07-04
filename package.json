@@ -1,0 +1,22 @@
+{
+  "name": "react-native-swipe-left",
+  "version": "0.0.1",
+  "description": "a RN component that give each row of listView the skill of swipe left.(左滑解决方案)",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yzsolo/react-native-swipe-left.git"
+  },
+  "author": "yzsolo125@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yzsolo/react-native-swipe-left/issues"
+  },
+  "homepage": "https://github.com/yzsolo/react-native-swipe-left#readme"
+}
