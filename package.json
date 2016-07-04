@@ -1,6 +1,6 @@
 {
   "name": "react-native-swipe-left",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "a RN component that give each row of listView the skill of swipe left.(左滑解决方案)",
   "main": "index.js",
   "directories": {

@@ -181,6 +181,7 @@ export default class Swipes extends Component {
 
     _onPanResponderTerminate(evt, gestureState) {
         this.props.isTerminate && this.props.isTerminate();
+        let right = -this.state.width;
 
         if(this.state.left._value < -5) {
             this.disallowScroll && this.disallowScroll();
@@ -188,8 +189,10 @@ export default class Swipes extends Component {
             this._setIsOpenState(true);
             this._setHasIdOpenState(true);
             this.moving(this.state.btnright, 0);
-            this.moving(this.state.left, this.props.right);
+            this.moving(this.state.left, right);
         }
+
+        return false;
 
     }
 
