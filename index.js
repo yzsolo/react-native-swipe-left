@@ -6,43 +6,43 @@
 
 import React, { Component } from 'react';
 import {
- 	View,
- 	Text,
- 	Image,
- 	StyleSheet,
- 	PanResponder,
- 	Easing,
- 	Animated,
-	TouchableHighlight
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    PanResponder,
+    Animated,
+    TouchableHighlight
 } from 'react-native';
 
 export default class Swipes extends Component {
 
 	constructor(props) {
-    	super(props);
-    	let _width = _width || this._getBtnBoxWidth();
-    	this.state = {
-    		left: new Animated.Value(0),
-    		isOpen: false,
-    		btnright: new Animated.Value(-_width),
-    		flag: false,
-    		height: 0,
-    		width: 0
-    	};    	
+        super(props);
+        let _width = _width || this._getBtnBoxWidth();
+        this.state = {
+            left: new Animated.Value(0),
+            isOpen: false,
+            btnright: new Animated.Value(-_width),
+            flag: false,
+            height: 0,
+            width: 0
+        };
 
 	}
 
-	_closeRow = () => {
-		let _width = _width || this._getBtnBoxWidth();
-		this._setIsOpenState(false);
-    	this._setHasIdOpenState(false);
+    _closeRow = () => {
+        let _width = _width || this._getBtnBoxWidth();
+        this._setIsOpenState(false);
+        this._setHasIdOpenState(false);
         this.moving(this.state.btnright, -_width);
-		this.moving(this.state.left, 0);	
+        this.moving(this.state.left, 0);	
 	}
 
 	_getBtnBoxWidth() {
 		let arr = [];
-    	this.props.rightBtn.map(function(item){
+
+        this.props.rightBtn.map(function(item){
 			return arr.push(item.width);
 		})
 
@@ -54,29 +54,25 @@ export default class Swipes extends Component {
 
 	componentWillMount() {
 		this._panResponder = PanResponder.create({
-			onStartShouldSetPanResponder: (evt, gestureState) => {
-				return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
-			},
-      		onStartShouldSetPanResponderCapture: (evt, gestureState) => {
-				return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
-      		},
-      		onMoveShouldSetPanResponder: (evt, gestureState) => {
-      			return Math.abs(gestureState.dx) >= 0;
-      		},
-      		onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-      			return Math.abs(gestureState.dx) >= 0;
-      		},
-      		onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},			
-		    onPanResponderRelease: (evt, gestureState) => {this._onPanResponderRelease(evt, gestureState)},
-		    onPanResponderTerminate: (evt, gestureState) => {this._onPanResponderTerminate(evt, gestureState)},
+            onStartShouldSetPanResponder: (evt, gestureState) => {
+            	return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
+            },
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => {
+                return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
+            },
+            onMoveShouldSetPanResponder: (evt, gestureState) => {return Math.abs(gestureState.dx) >= 0;},
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => {return Math.abs(gestureState.dx) >= 0;},
+            onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},			
+            onPanResponderRelease: (evt, gestureState) => {this._onPanResponderRelease(evt, gestureState)},
+            onPanResponderTerminate: (evt, gestureState) => {this._onPanResponderTerminate(evt, gestureState)},
 		})
 
-    	let _width = _width || this._getBtnBoxWidth();
+        let _width = _width || this._getBtnBoxWidth();
 
-		this.setState({
-			width: _width
-		})
-	}
+        this.setState({
+            width: _width
+        })
+    }
 
 	_onPanResponderMove(evt, gestureState) {
 		let dx;
@@ -121,86 +117,83 @@ export default class Swipes extends Component {
     }
 
     _setLeftState(val) {
-		this.setState({
-			left:  val
-		})   	
+        this.setState({
+            left:  val
+        })   	
     }
 
     _setBtnRightState(val) {
-		this.setState({
-			btnright: val
-		})
+        this.setState({
+            btnright: val
+        })
     }
 
     _setHasIdOpenState(bool) {
-		this.props.root.setState({
-    		hasIdOpen: bool
-    	})
+        this.props.root.setState({
+            hasIdOpen: bool
+        })
     }
 
     _setIsOpenState(bool) {
-    	this.setState({
-    		isOpen: bool
-    	});
+        this.setState({
+            isOpen: bool
+        });
     }
 
-	_onPanResponderRelease(evt, gestureState) {
+    _onPanResponderRelease(evt, gestureState) {
 
-		let toValue;
-    	let isOpen;
-    	let btnRight;
-    	let dx;
-    	let right = -this.state.width;
-    	let range;
+        let toValue;
+        let isOpen;
+        let btnRight;
+        let dx;
+        let right = -this.state.width;
+        let range;
 
-    	if(this.state.isOpen || this.props.root.state.hasIdOpen) {
-    		dx = right + gestureState.dx;
-    		range = right + 40
-    	} else {
-    		dx = gestureState.dx;
-    		range = -40;
-    	}
-    	
-    	if(dx<range && dx!== right) {
-    		toValue = right;
-    		isOpen = true;
-    		btnRight = 0;
-    		this.disallowScroll && this.disallowScroll();
-    		this.isRowOpen && this.isRowOpen();
-    		this._setHasIdOpenState(true);
-    	} else {
-    		toValue = 0;
-    		isOpen = false;
-    		btnRight = right;
-    		this.allowScroll && this.allowScroll();
-			/* 点击其他row关闭openRow */
-    		this.closeRow && this.closeRow();
-    	}
+        if(this.state.isOpen || this.props.root.state.hasIdOpen) {
+            dx = right + gestureState.dx;
+            range = right + 40
+        } else {
+            dx = gestureState.dx;
+            range = -40;
+        }
 
-    	this._setIsOpenState(isOpen);
-    	this.moving(this.state.btnright, btnRight);
-    	this.moving(this.state.left, toValue);	
+        if(dx<range && dx!== right) {
+            toValue = right;
+            isOpen = true;
+            btnRight = 0;
+            this.disallowScroll && this.disallowScroll();
+            this.isRowOpen && this.isRowOpen();
+            this._setHasIdOpenState(true);
+        } else {
+            toValue = 0;
+            isOpen = false;
+            btnRight = right;
+            this.allowScroll && this.allowScroll();
+            /* 点击其他row关闭openRow */
+            this.closeRow && this.closeRow();
+        }
 
-	}
+        this._setIsOpenState(isOpen);
+        this.moving(this.state.btnright, btnRight);
+        this.moving(this.state.left, toValue);	
 
-	_onPanResponderTerminate(evt, gestureState) {
-		this.props.isTerminate && this.props.isTerminate();
+    }
 
-		if(this.state.left._value < -5) {
-    		this.disallowScroll && this.disallowScroll();
-    		this.isRowOpen && this.isRowOpen();
+    _onPanResponderTerminate(evt, gestureState) {
+        this.props.isTerminate && this.props.isTerminate();
 
-			this._setIsOpenState(true);
+        if(this.state.left._value < -5) {
+            this.disallowScroll && this.disallowScroll();
+            this.isRowOpen && this.isRowOpen();
+            this._setIsOpenState(true);
+            this._setHasIdOpenState(true);
+            this.moving(this.state.btnright, 0);
+            this.moving(this.state.left, this.props.right);
+        }
 
-			this._setHasIdOpenState(true);
+    }
 
-	    	this.moving(this.state.btnright, 0);
-	    	this.moving(this.state.left, this.props.right);
-		}
-
-	}
-
-	moving(k, v) {
+    moving(k, v) {
         let type = this.props.animationType;
         let duration = this.props.duration
         if(type === 'timing'){
@@ -214,19 +207,19 @@ export default class Swipes extends Component {
                 duration: duration
             }).start();
         }
-		
-	}
 
-	isRowOpen() {
-    	let root = this.props.root;
-    	let id = this.props.id;
+    }
+
+    isRowOpen() {
+        let root = this.props.root;
+        let id = this.props.id;
         if(!root.openRowId)
         root.openRowId = id;
     }
 
     isRowMove() {
-    	let root = this.props.root;
-    	let id = this.props.id;
+        let root = this.props.root;
+        let id = this.props.id;
         if(root.openRowId && root.openRowId !== id) {
             root._dataRow[root.openRowId]._closeRow();
             root.openRowId = '';
@@ -234,25 +227,25 @@ export default class Swipes extends Component {
     }
 
     isTerminate() {
-    	let root = this.props.root;
-    	let id = this.props.id;
+        let root = this.props.root;
+        let id = this.props.id;
         if(root.openRowId && root.openRowId !== id) {
-          root._dataRow[root.openRowId]._closeRow();
+            root._dataRow[root.openRowId]._closeRow();
         }
         root.openRowId = id;
     }
 
     closeRow() {
-    	let root = this.props.root;
+        let root = this.props.root;
         if(root.openRowId) {
             root._dataRow[root.openRowId]._closeRow();
         }
     }
 
     allowScroll() {
-    	let root = this.props.root;
+        let root = this.props.root;
 
-    	/* 接入原生下拉 */
+        /* 接入原生下拉 */
         root.setState({
             scrollEnable: true
         })
@@ -265,9 +258,9 @@ export default class Swipes extends Component {
     }
 
     disallowScroll() {
-    	let root = this.props.root;
+        let root = this.props.root;
 
-    	/* 接入原生下拉 */
+        /* 接入原生下拉 */
         root.setState({
             scrollEnable: false
         })
@@ -279,67 +272,67 @@ export default class Swipes extends Component {
         // });
     }
 
- 	render() {
+    render() {
 
- 		return (
- 			<View onLayout={(e)=>{this.setState({height:e.nativeEvent.layout.height})}}>
-	 			<View ref='view' style={[styles.containerBox, {backgroundColor:this.props.boxbgColor}]}>
+        return (
+            <View onLayout={(e)=>{this.setState({height:e.nativeEvent.layout.height})}}>
+                <View ref='view' style={[styles.containerBox, {backgroundColor:this.props.boxbgColor}]}>
 
-			        <Animated.View style={
-			        	[styles.container, {
-				 			backgroundColor: this.props.rowbgColor,
-				 		    left: this.state.left}
-				 		]} 
-			        	{...this._panResponder.panHandlers}>
-			            {this.props.children}
-			        </Animated.View>
+                    <Animated.View style={
+                        [styles.container, {
+                            backgroundColor: this.props.rowbgColor,
+                            left: this.state.left}
+                        ]} 
+                        {...this._panResponder.panHandlers}>
+                        {this.props.children}
+                    </Animated.View>
 
-	 				<Animated.View style={
-	 					[styles.deletebtnbox,{
-	 						width: this.state.width,
-	 						right: this.state.btnright,
-	 						height: this.state.height}
-	 					]}>
-	 						{this.props.rightBtn.map((item)=>{
+                    <Animated.View style={
+                        [styles.deletebtnbox,{
+                            width: this.state.width,
+                            right: this.state.btnright,
+                            height: this.state.height}
+                        ]}>
+                            {this.props.rightBtn.map((item)=>{
 
-								return <TouchableHighlight key={item.id} style={[styles.deletebtn, {width: item.width, height: this.state.height, backgroundColor: item.bgColor}]} onPress={item.onPress} underlayColor={item.underlayColor}>
-				                			{item.text?
-				                				<Text style={{color: item.color||null, fontSize: item.fontSize||null}}>{item.text}</Text>
-				                				:
-				                				item.image?
-				                					<Image style={[styles.deleteBut, {width: 50, height: 50}]} source={{uri: item.image}} />
-				                					:
-				                					null}
-				            			</TouchableHighlight>							
-				        	})}
-		        	</Animated.View>
-			    </View>
-		    </View>
- 		);
- 	}
+                        return <TouchableHighlight key={item.id} style={[styles.deletebtn, {width: item.width, height: this.state.height, backgroundColor: item.bgColor}]} onPress={item.onPress} underlayColor={item.underlayColor}>
+                                {item.text?
+                                    <Text style={{color: item.color||null, fontSize: item.fontSize||null}}>{item.text}</Text>
+                                    :
+                                    item.image?
+                                        <Image style={[styles.deleteBut, {width: 50, height: 50}]} source={{uri: item.image}} />
+                                        :
+                                        null}
+                            </TouchableHighlight>							
+                        })}
+                    </Animated.View>
+                </View>
+            </View>
+        );
+    }
 
 }
 
 Swipes.defaultProps = {
-	boxbgColor: '#eeeeee',
-	rowbgColor: '#ffffff',
+    boxbgColor: '#eeeeee',
+    rowbgColor: '#ffffff',
     animationType: 'timing',
     duration: 150,
 }
 
 let styles = StyleSheet.create({
- 	containerBox: {
- 		flex: 1,
- 		flexDirection: 'row',
-	    justifyContent:'center',
-	    overflow: 'hidden',
-	    position: 'relative',
- 	},
+    containerBox: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent:'center',
+        overflow: 'hidden',
+        position: 'relative',
+    },
     container: {
-	    flex: 1,
-	    borderBottomWidth: 1,
-	    borderBottomColor: '#eeeeee',
-	    overflow: 'hidden',
+        flex: 1,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eeeeee',
+        overflow: 'hidden',
     },
     deletebtnbox: {
         flex: 1,
@@ -349,10 +342,10 @@ let styles = StyleSheet.create({
         right: 0,
         flexDirection: 'row',
         alignItems: 'center',
-	    justifyContent:'center',
+        justifyContent:'center',
     },
     deletebtn: {
-	    alignItems: 'center',
-	    justifyContent: 'center'
-	}
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 })
