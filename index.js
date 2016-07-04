@@ -17,7 +17,7 @@ import {
 
 export default class Swipes extends Component {
 
-	constructor(props) {
+    constructor(props) {
         super(props);
         let _width = _width || this._getBtnBoxWidth();
         this.state = {
@@ -29,33 +29,33 @@ export default class Swipes extends Component {
             width: 0
         };
 
-	}
+    }
 
     _closeRow = () => {
         let _width = _width || this._getBtnBoxWidth();
         this._setIsOpenState(false);
         this._setHasIdOpenState(false);
         this.moving(this.state.btnright, -_width);
-        this.moving(this.state.left, 0);	
-	}
+        this.moving(this.state.left, 0);
+    }
 
-	_getBtnBoxWidth() {
-		let arr = [];
+    _getBtnBoxWidth() {
+        let arr = [];
 
         this.props.rightBtn.map(function(item){
-			return arr.push(item.width);
-		})
+            return arr.push(item.width);
+        })
 
-		return arr.reduce(function(pre, cur) {
-			return pre + cur;
-		});
+        return arr.reduce(function(pre, cur) {
+            return pre + cur;
+        });
 
-	}
+    }
 
-	componentWillMount() {
-		this._panResponder = PanResponder.create({
+    componentWillMount() {
+        this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt, gestureState) => {
-            	return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
+                return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
             },
             onStartShouldSetPanResponderCapture: (evt, gestureState) => {
                 return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
@@ -65,7 +65,7 @@ export default class Swipes extends Component {
             onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},			
             onPanResponderRelease: (evt, gestureState) => {this._onPanResponderRelease(evt, gestureState)},
             onPanResponderTerminate: (evt, gestureState) => {this._onPanResponderTerminate(evt, gestureState)},
-		})
+        })
 
         let _width = _width || this._getBtnBoxWidth();
 
@@ -74,52 +74,52 @@ export default class Swipes extends Component {
         })
     }
 
-	_onPanResponderMove(evt, gestureState) {
-		let dx;
-		let right = -this.state.width;
+    _onPanResponderMove(evt, gestureState) {
+        let dx;
+        let right = -this.state.width;
 
-		if(Math.abs(gestureState.dx)>5) {
-			this.disallowScroll && this.disallowScroll();
-		}
+        if(Math.abs(gestureState.dx)>5) {
+            this.disallowScroll && this.disallowScroll();
+        }
 
-		this.isRowMove && this.isRowMove();
-	
-		if(!this.state.isOpen) {
-			dx = gestureState.dx;
+        this.isRowMove && this.isRowMove();
 
-			if(dx < 0) {
+        if(!this.state.isOpen) {
+            dx = gestureState.dx;
 
-				if(dx >= right) {
-					let r = right - dx;
-					this._setBtnRightState(new Animated.Value(r));
-				} else {
-					this._setBtnRightState(new Animated.Value(0));
-				}
+            if(dx < 0) {
 
-				if(dx < 50) {
-	        		this._setLeftState(new Animated.Value(dx));
-				}
-        
-			}
-		} else {
-			dx = right + gestureState.dx;
+                if(dx >= right) {
+                    let r = right - dx;
+                    this._setBtnRightState(new Animated.Value(r));
+                } else {
+                    this._setBtnRightState(new Animated.Value(0));
+                }
 
-			if(dx>right) {
-				this._setBtnRightState(new Animated.Value(-gestureState.dx));
-			}
+                if(dx < 50) {
+                    this._setLeftState(new Animated.Value(dx));
+                }
 
-			if(dx < 50) {
-        		this._setLeftState(new Animated.Value(dx));
-			}
+            }
+        } else {
+            dx = right + gestureState.dx;
 
-		}
-						
+            if(dx>right) {
+                this._setBtnRightState(new Animated.Value(-gestureState.dx));
+            }
+
+            if(dx < 50) {
+                this._setLeftState(new Animated.Value(dx));
+            }
+
+        }
+
     }
 
     _setLeftState(val) {
         this.setState({
             left:  val
-        })   	
+        })
     }
 
     _setBtnRightState(val) {
