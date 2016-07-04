@@ -11,12 +11,69 @@ IOS | Android
 ![swipeleft ios preview](http://imgur.com/e7FKKUs.gif) | ![swipeleft android preview](http://imgur.com/wuWThj7.gif)
 
 ### 满足
-功能 | 完成度
+RESOLVE | 解决
 ----------------- | ----- | ----------
-row之间的互斥收回 | down | 
-左边按钮的可配置化（可配置多按钮，文字/图片，背景色，宽度，回调) | down
-单个row内的按钮或链接可点击|                down
-可选择滚动动画类型，timing/spring|  down
+the Opposite effect between two rows |（row之间的互斥收回）
+button configurable（one or more, text/image, bgcolor, width,callback etc）|左边按钮的可配置化（可配置多按钮，文字/图片，背景色，宽度，回调) 
+pressable in single row |单个row内的按钮或链接可点击
+optional animation type, timing/spring |可选择滚动动画类型，timing/spring
+
+### Installation
+```
+npm install --save react-native-swipe-left
+```
+
+### Usage example
+see the example/example.js for a more detailed example.
+```javascript
+// 1, settings in your constructor
+constructor(props) {
+ 	this._dataRow = {};
+    this.openRowId = '';
+    this.state = {
+	    scrollEnable: true,
+        hasIdOpen: false
+    };
+}
+
+// 2, set scrollEnabled  
+<ScrollView scrollEnabled={this.state.scrollEnable} {...props}/>
+
+// 3, set your button`s setting
+let rightBtn = [{
+    id: 1,
+	text: 'button',
+	width: 80,
+	bgColor: 'red',
+	underlayColor: '#ffffff',
+    onPress: ()=>{alert('delete1!');},
+}, {
+      id: 2,
+      image: 'your uri',
+      width: 80,
+      bgColor: null,
+      onPress: ()=>{alert('delete2!')}
+}, {
+	id: 3,
+	text: 'button',
+	width: 80,
+	bgColor: 'yellow',
+	onPress: ()=>{alert('delete3!');},
+}]
+
+
+// 4, in your renderRow function(a is sectionId, b is rowId)
+let id = '' + a + b; 
+<SwipeitemView 
+    root={this}
+    ref={(row)=>this._dataRow[id] = row}
+    id={id}
+    data={data}
+    rightBtn={rightBtn}>
+	{children node}
+</SwipeitemView>
+```
+
 
 ### Props
 
