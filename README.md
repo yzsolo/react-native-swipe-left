@@ -1,5 +1,5 @@
 # react-native-swipe-left
-a RN swipe-left component for listView..
+a RN swipe-left component for listView.(左滑解决方案)
 
 ### IOS && ANDROID
 IOS | Android
