@@ -1,7 +1,7 @@
 {
   "name": "react-native-swipe-left",
-  "version": "0.0.8",
-  "description": "a RN component that make each row of listView can be swipe left.(左滑解决方案)",
+  "version": "0.0.9",
+  "description": "a RN swipe-left component for listView.(左滑解决方案)",
   "main": "index.js",
   "directories": {
     "example": "example"

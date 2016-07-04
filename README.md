@@ -1,5 +1,5 @@
 # react-native-swipe-left
-a RN component that give each row of listView the skill of swipe left.
+a RN swipe-left component for listView..
 
 ### IOS && ANDROID
 IOS | Android
