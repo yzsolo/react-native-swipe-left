@@ -10,7 +10,7 @@ IOS | Android
 -----|-------
 ![swipeleft ios preview](http://imgur.com/e7FKKUs.gif) | ![swipeleft android preview](http://imgur.com/wuWThj7.gif)
 
-### 满足
+### Features （特性）
 RESOLVE | 解决
 ----------------- | ----- | ----------
 the Opposite effect between two rows |（row之间的互斥收回）
