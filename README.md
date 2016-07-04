@@ -8,7 +8,7 @@ IOS | Android
 
 IOS | Android
 -----|-------
-![swipeleft ios preview](http://imgur.com/e7FKKUs.gif) | ![swipeleft android preview](http://i.imgur.com/ayjL5y7.gif)
+![swipeleft ios preview](http://imgur.com/e7FKKUs.gif) | ![swipeleft android preview](http://i.imgur.com/oXOMKME.gif)
 
 ### Features （特性）
 RESOLVE | 解决

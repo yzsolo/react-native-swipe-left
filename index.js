@@ -79,10 +79,10 @@ export default class Swipes extends Component {
         let right = -this.state.width;
 
         if(Math.abs(gestureState.dx)>5) {
-            this.disallowScroll && this.disallowScroll();
+            this.disallowScroll();
         }
 
-        this.isRowMove && this.isRowMove();
+        this.isRowMove();
 
         if(!this.state.isOpen) {
             dx = gestureState.dx;
@@ -161,16 +161,16 @@ export default class Swipes extends Component {
             toValue = right;
             isOpen = true;
             btnRight = 0;
-            this.disallowScroll && this.disallowScroll();
-            this.isRowOpen && this.isRowOpen();
+            this.disallowScroll();
+            this.isRowOpen();
             this._setHasIdOpenState(true);
         } else {
             toValue = 0;
             isOpen = false;
             btnRight = right;
-            this.allowScroll && this.allowScroll();
+            this.allowScroll();
             /* 点击其他row关闭openRow */
-            this.closeRow && this.closeRow();
+            this.closeRow();
         }
 
         this._setIsOpenState(isOpen);
@@ -180,12 +180,12 @@ export default class Swipes extends Component {
     }
 
     _onPanResponderTerminate(evt, gestureState) {
-        this.props.isTerminate && this.props.isTerminate();
+        this.isTerminate();
         let right = -this.state.width;
 
         if(this.state.left._value < -5) {
-            this.disallowScroll && this.disallowScroll();
-            this.isRowOpen && this.isRowOpen();
+            this.disallowScroll();
+            this.isRowOpen();
             this._setIsOpenState(true);
             this._setHasIdOpenState(true);
             this.moving(this.state.btnright, 0);
