@@ -2,7 +2,6 @@
 a RN component that give each row of listView the skill of swipe left.
 
 ### IOS && ANDROID
-if it is slow in android，make sure had close the dev mode
 IOS | Android
 -----|-------
 ![swipeleft ios preview](http://imgur.com/KswnF0X.gif) | ![swipeleft android preview](http://imgur.com/6FyHjft.gif)
