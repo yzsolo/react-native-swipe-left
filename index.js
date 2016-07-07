@@ -93,7 +93,7 @@ export default class Swipes extends Component {
                     });
                 } else {
                     this.setState({
-                        BtnTranslateX: new Animated.Value(0)
+                        BtnTranslateX: new Animated.Value(right)
                     });
                 }
 
