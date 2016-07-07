@@ -12,7 +12,7 @@ import {
     StyleSheet,
     PanResponder,
     Animated,
-    TouchableHighlight
+    TouchableHighlight,
 } from 'react-native';
 
 export default class Swipes extends Component {
@@ -21,12 +21,10 @@ export default class Swipes extends Component {
         super(props);
         let _width = _width || this._getBtnBoxWidth();
         this.state = {
-            left: new Animated.Value(0),
             isOpen: false,
-            btnright: new Animated.Value(-_width),
-            flag: false,
             height: 0,
-            width: 0
+            RowTranslateX: new Animated.Value(0),
+            BtnTranslateX: new Animated.Value(0)
         };
 
     }
@@ -35,8 +33,9 @@ export default class Swipes extends Component {
         let _width = _width || this._getBtnBoxWidth();
         this._setIsOpenState(false);
         this._setHasIdOpenState(false);
-        this.moving(this.state.btnright, -_width);
-        this.moving(this.state.left, 0);
+
+        this.moving(this.state.RowTranslateX, 0);
+        this.moving(this.state.BtnTranslateX, 0);
     }
 
     _getBtnBoxWidth() {
@@ -53,6 +52,7 @@ export default class Swipes extends Component {
     }
 
     componentWillMount() {
+
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt, gestureState) => {
                 return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
@@ -60,23 +60,19 @@ export default class Swipes extends Component {
             onStartShouldSetPanResponderCapture: (evt, gestureState) => {
                 return (this.state.isOpen || this.props.root.state.hasIdOpen)? true : false;
             },
-            onMoveShouldSetPanResponder: (evt, gestureState) => {return Math.abs(gestureState.dx) >= 0;},
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => {return Math.abs(gestureState.dx) >= 0;},
-            onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},			
+            onMoveShouldSetPanResponder: (evt, gestureState) => {return Math.abs(gestureState.dx) > 0;},
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => {return Math.abs(gestureState.dx) > 0;},
+            onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},           
             onPanResponderRelease: (evt, gestureState) => {this._onPanResponderRelease(evt, gestureState)},
             onPanResponderTerminate: (evt, gestureState) => {this._onPanResponderTerminate(evt, gestureState)},
         })
 
-        let _width = _width || this._getBtnBoxWidth();
-
-        this.setState({
-            width: _width
-        })
     }
 
     _onPanResponderMove(evt, gestureState) {
         let dx;
-        let right = -this.state.width;
+        let _width = _width || this._getBtnBoxWidth();
+        let right = -_width;
 
         if(Math.abs(gestureState.dx)>5) {
             this.disallowScroll();
@@ -85,68 +81,55 @@ export default class Swipes extends Component {
         this.isRowMove();
 
         if(!this.state.isOpen) {
+
             dx = gestureState.dx;
 
-            if(dx < 0) {
+            if(dx < -10) {
+                dx += 10;
 
                 if(dx >= right) {
-                    let r = right - dx;
-                    this._setBtnRightState(new Animated.Value(r));
+                    this.setState({
+                        BtnTranslateX: new Animated.Value(dx)
+                    });
                 } else {
-                    this._setBtnRightState(new Animated.Value(0));
+                    this.setState({
+                        BtnTranslateX: new Animated.Value(0)
+                    });
                 }
 
                 if(dx < 50) {
-                    this._setLeftState(new Animated.Value(dx));
+                    this.setState({
+                        RowTranslateX: new Animated.Value(dx)
+                    });
                 }
 
             }
+
         } else {
             dx = right + gestureState.dx;
 
             if(dx>right) {
-                this._setBtnRightState(new Animated.Value(-gestureState.dx));
+                this.setState({
+                    BtnTranslateX: new Animated.Value(dx)
+                })
             }
 
             if(dx < 50) {
-                this._setLeftState(new Animated.Value(dx));
+                this.setState({
+                    RowTranslateX: new Animated.Value(dx)
+                })
             }
 
         }
 
     }
 
-    _setLeftState(val) {
-        this.setState({
-            left:  val
-        })
-    }
-
-    _setBtnRightState(val) {
-        this.setState({
-            btnright: val
-        })
-    }
-
-    _setHasIdOpenState(bool) {
-        this.props.root.setState({
-            hasIdOpen: bool
-        })
-    }
-
-    _setIsOpenState(bool) {
-        this.setState({
-            isOpen: bool
-        });
-    }
-
     _onPanResponderRelease(evt, gestureState) {
-
         let toValue;
         let isOpen;
-        let btnRight;
         let dx;
-        let right = -this.state.width;
+        let _width = _width || this._getBtnBoxWidth();
+        let right = -_width;
         let range;
 
         if(this.state.isOpen || this.props.root.state.hasIdOpen) {
@@ -160,40 +143,52 @@ export default class Swipes extends Component {
         if(dx<range && dx!== right) {
             toValue = right;
             isOpen = true;
-            btnRight = 0;
             this.disallowScroll();
             this.isRowOpen();
             this._setHasIdOpenState(true);
         } else {
             toValue = 0;
             isOpen = false;
-            btnRight = right;
             this.allowScroll();
             /* 点击其他row关闭openRow */
             this.closeRow();
         }
 
         this._setIsOpenState(isOpen);
-        this.moving(this.state.btnright, btnRight);
-        this.moving(this.state.left, toValue);	
+ 
+        this.moving(this.state.RowTranslateX, toValue);
+        this.moving(this.state.BtnTranslateX, toValue);
 
     }
 
     _onPanResponderTerminate(evt, gestureState) {
         this.isTerminate();
-        let right = -this.state.width;
-
-        if(this.state.left._value < -5) {
+        let _width = _width || this._getBtnBoxWidth();
+        let right = -_width;
+        if(this.state.RowTranslateX._value < -2) {
             this.disallowScroll();
             this.isRowOpen();
             this._setIsOpenState(true);
             this._setHasIdOpenState(true);
-            this.moving(this.state.btnright, 0);
-            this.moving(this.state.left, right);
+
+            this.moving(this.state.RowTranslateX, -_width);
+            this.moving(this.state.BtnTranslateX, -_width);
         }
 
         return false;
 
+    }
+
+    _setHasIdOpenState(bool) {
+        this.props.root.setState({
+            hasIdOpen: bool
+        })
+    }
+
+    _setIsOpenState(bool) {
+        this.setState({
+            isOpen: bool
+        });
     }
 
     moving(k, v) {
@@ -276,7 +271,7 @@ export default class Swipes extends Component {
     }
 
     render() {
-
+        let _width = _width || this._getBtnBoxWidth();
         return (
             <View onLayout={(e)=>{this.setState({height:e.nativeEvent.layout.height})}}>
                 <View ref='view' style={[styles.containerBox, {backgroundColor:this.props.boxbgColor}]}>
@@ -284,16 +279,18 @@ export default class Swipes extends Component {
                     <Animated.View style={
                         [styles.container, {
                             backgroundColor: this.props.rowbgColor,
-                            left: this.state.left}
-                        ]} 
+                            left: 0,
+                            transform: [{translateX: this.state.RowTranslateX}]
+                        }]} 
                         {...this._panResponder.panHandlers}>
                         {this.props.children}
                     </Animated.View>
 
                     <Animated.View style={
                         [styles.deletebtnbox,{
-                            width: this.state.width,
-                            right: this.state.btnright,
+                            width: _width,
+                            right: -_width,
+                            transform: [{translateX: this.state.BtnTranslateX}],
                             height: this.state.height}
                         ]}>
                             {this.props.rightBtn.map((item)=>{
@@ -306,7 +303,7 @@ export default class Swipes extends Component {
                                         <Image style={[styles.deleteBut, {width: 50, height: 50}]} source={{uri: item.image}} />
                                         :
                                         null}
-                            </TouchableHighlight>							
+                            </TouchableHighlight>                           
                         })}
                     </Animated.View>
                 </View>
