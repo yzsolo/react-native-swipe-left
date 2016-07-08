@@ -18,6 +18,7 @@ button configurable（one or more, text/image, bgcolor, width,callback etc）|�
 pressable in single row |单个row内的按钮或链接可点击
 optional animation type, timing/spring |可选择滚动动画类型，timing/spring
 
+
 ### Installation
 ```
 npm install --save react-native-swipe-left
@@ -103,3 +104,5 @@ bgColor         | string | Yes   |            | backgroundColor of button
 onPress         | function| Yes  |            | the callback when you press a button
 underlayColor   | string | Yes   |            | the underlayColor of TouchableHighlight
 
+### Note：
+从组件本身来讲，已经完成了ios/android端能够流畅左滑的工作([优化过程](https://github.com/yzsolo/yzsolo.github.io/issues/22 "优化过程"))，但还可以继续优化体验，除了上面特性的可配置化，后期会增加更多灵活的配置，如：是否选择互斥，或是类似qq那样单次滑动只做一件事，滑出或滑进。下一步的工作是解决左滑与原生下拉刷新之间的冲突，虽然现在已经对这一点采取了一定的优化措施，但还是存在不完美的地方，后面会继续完善，这将会是一整套完善的左滑解决方案。
