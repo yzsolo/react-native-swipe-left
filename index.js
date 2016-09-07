@@ -62,7 +62,7 @@ export default class Swipes extends Component {
             },
             onMoveShouldSetPanResponder: (evt, gestureState) => {return Math.abs(gestureState.dx) > 0;},
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => {return Math.abs(gestureState.dx) > 0;},
-            onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},           
+            onPanResponderMove: (evt, gestureState) => {this._onPanResponderMove(evt, gestureState)},
             onPanResponderRelease: (evt, gestureState) => {this._onPanResponderRelease(evt, gestureState)},
             onPanResponderTerminate: (evt, gestureState) => {this._onPanResponderTerminate(evt, gestureState)},
         })
@@ -155,7 +155,7 @@ export default class Swipes extends Component {
         }
 
         this._setIsOpenState(isOpen);
- 
+
         this.moving(this.state.RowTranslateX, toValue);
         this.moving(this.state.BtnTranslateX, toValue);
 
@@ -190,6 +190,10 @@ export default class Swipes extends Component {
             isOpen: bool
         });
     }
+
+	_onPress = (item, rowId) => event => {
+		item.onPress(event, rowId)
+	}
 
     moving(k, v) {
         let type = this.props.animationType;
@@ -272,6 +276,7 @@ export default class Swipes extends Component {
 
     render() {
         let _width = _width || this._getBtnBoxWidth();
+		const rowId = this.props.id
         return (
             <View onLayout={(e)=>{this.setState({height:e.nativeEvent.layout.height})}}>
                 <View ref='view' style={[styles.containerBox, {backgroundColor:this.props.boxbgColor}]}>
@@ -281,7 +286,7 @@ export default class Swipes extends Component {
                             backgroundColor: this.props.rowbgColor,
                             left: 0,
                             transform: [{translateX: this.state.RowTranslateX}]
-                        }]} 
+                        }]}
                         {...this._panResponder.panHandlers}>
                         {this.props.children}
                     </Animated.View>
@@ -295,7 +300,7 @@ export default class Swipes extends Component {
                         ]}>
                             {this.props.rightBtn.map((item)=>{
 
-                        return <TouchableHighlight key={item.id} style={[styles.deletebtn, {width: item.width, height: this.state.height, backgroundColor: item.bgColor}]} onPress={item.onPress} underlayColor={item.underlayColor}>
+                        return <TouchableHighlight key={item.id} style={[styles.deletebtn, {width: item.width, height: this.state.height, backgroundColor: item.bgColor}]} onPress={this._onPress(item, rowId)} underlayColor={item.underlayColor}>
                                 {item.text?
                                     <Text style={{color: item.color||null, fontSize: item.fontSize||null}}>{item.text}</Text>
                                     :
@@ -303,7 +308,7 @@ export default class Swipes extends Component {
                                         <Image style={[styles.deleteBut, {width: 50, height: 50}]} source={{uri: item.image}} />
                                         :
                                         null}
-                            </TouchableHighlight>                           
+                            </TouchableHighlight>
                         })}
                     </Animated.View>
                 </View>
@@ -330,8 +335,8 @@ let styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eeeeee',
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#eeeeee',
         overflow: 'hidden',
     },
     deletebtnbox: {
