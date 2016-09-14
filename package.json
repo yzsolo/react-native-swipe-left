@@ -1,6 +1,6 @@
 {
   "name": "react-native-swipe-left",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "a RN swipe-left component for listView.(左滑解决方案)",
   "main": "index.js",
   "directories": {
