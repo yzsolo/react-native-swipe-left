@@ -222,7 +222,7 @@ export default class Swipes extends Component {
     isRowMove() {
         let root = this.props.root;
         let id = this.props.id;
-        if(root.openRowId && root.openRowId !== id) {
+        if(root.openRowId && root.openRowId !== id && root._dataRow[root.openRowId]) {
             root._dataRow[root.openRowId]._closeRow();
             root.openRowId = '';
         }
@@ -231,7 +231,7 @@ export default class Swipes extends Component {
     isTerminate() {
         let root = this.props.root;
         let id = this.props.id;
-        if(root.openRowId && root.openRowId !== id) {
+        if(root.openRowId && root.openRowId !== id && root._dataRow[root.openRowId]) {
             root._dataRow[root.openRowId]._closeRow();
         }
         root.openRowId = id;
@@ -239,7 +239,7 @@ export default class Swipes extends Component {
 
     closeRow() {
         let root = this.props.root;
-        if(root.openRowId) {
+        if(root.openRowId && root._dataRow[root.openRowId]) {
             root._dataRow[root.openRowId]._closeRow();
         }
     }
