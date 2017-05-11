@@ -12,7 +12,7 @@ IOS | Android
 
 ### Features （特性）
 RESOLVE | 解决
------------------ | ----- | ----------
+----------------- | ----- 
 the Opposite effect between two rows |（row之间的互斥收回）
 button configurable（one or more, text/image, bgcolor, width,callback etc）|左边按钮的可配置化（可配置多按钮，文字/图片，背景色，宽度，回调) 
 pressable in single row |单个row内的按钮或链接可点击
